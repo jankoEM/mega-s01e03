@@ -1,8 +1,8 @@
 ---
 layout: runbook
-title: '#4471 · three problems, not one'
+title: '#4471 · two problems, not one'
 owner: support desk
-status: open
+status: closed
 reviewed: 2026-10-28
 signature: jankoEM
 ---
@@ -15,33 +15,32 @@ signature: jankoEM
 
   const repo = 'https://github.com/jankoEM/mega-s01e03/issues';
   const problems = [
-    { key: 'parser', issue: '#1', href: `${repo}/1`, what: 'the shared parser reads day-first dates month first' },
-    { key: 'hint', issue: '#2', href: `${repo}/2`, what: 'booking-v3 tells day-first people to type month first' },
-    { key: 'oneDayMove', issue: '#3', href: `${repo}/3`, what: 'dates move by one day across time zones' },
+    { cause: 'parser', issue: '#1', href: `${repo}/1`, what: 'the shared parser reads day-first dates month first', outcome: 'fixed: fix(dates): parse dd/mm for eu locales' },
+    { cause: 'hint', issue: '#2', href: `${repo}/2`, what: 'booking-v3 tells day-first people to type month first', outcome: "won't fix: booking-v3 form retired" },
   ];
 </script>
 
 [#4471](/kb/incidents/4471) was merged by subject line ([decision 0001](/kb/decisions/0001-dedupe-by-subject)):
 every report that said "wrong date" went into one ticket, and the ticket was marked known with one
-fix queued. Read by cause instead of by subject, it holds three problems. Each one now has a ticket
-of its own, with the number of reports it covers.
+fix queued. Read by cause instead of by subject, it holds two problems. Each one got a ticket of its
+own, with the number of reports it covers, and each is now closed.
 
 <IssueSplit ticket={4471} {problems} />
 
-<Callout kind="warn">
-The fix queued for #4471 is the parser fix. It leaves the other two problems open: booking-v3 keeps
-its month-first hint, and the one-day moves are not a day/month swap at all.
+<Callout>
+Engineering closed #4471 on 5 October. The parser fix covers the <code>parser</code> reports only. The
+<code>hint</code> reports stop because booking-v3 is retired, not because of that fix.
 </Callout>
 
 ## How the reports were placed
 
 - **By tenant, not by browser.** Intake tags a report from the reporter's browser. The cause depends
-  on the tenant's locale and booking form ([causes.ts](/kb/triage/dedupe)). The tags disagree with
-  the cause on dozens of reports, so the counts here never use them.
+  on the tenant's locale and booking form (`causes.ts`). The tags and the cause disagree on many
+  reports, so the counts here never use the tags.
 - **Once per id.** The export pages overlap; a report that came twice counts once.
-- **One-day moves apart.** The desk already listed them in `desk-notes.json`. The cause table files
-  them under the parser and footnotes them; here they are their own problem, because the parser fix
-  does not reach them.
+- **Read-as notes stay where they are filed.** The reports the desk read as a one-day move
+  (`desk-notes.json`) count under their cause, as the cause table does. A ticket opened for them on
+  its own was closed as a duplicate of #1.
 
 ## The cause table, as the desk runs it
 
@@ -49,8 +48,8 @@ its month-first hint, and the one-day moves are not a day/month swap at all.
 
 ## For the desk
 
-- Merging by subject is still fine for the first hour of an incident. Before a merged ticket is
-  marked known, split it by cause.
-- When the parser fix ships, close #1 and re-count: the reports still coming in are #2 or #3.
+- Merging by subject is fine for the first hour of an incident. Before a merged ticket is marked
+  known, split it by cause: a second cause has no fix queued until it has a ticket.
+- If date reports keep coming in after the parser fix, they are a new ticket, not #4471.
 
 <RenderStamp {signature} />

@@ -10,8 +10,10 @@ export default {
   extensions: ['.svelte', '.svx'],
   preprocess: [vitePreprocess(), mdsvex({ extensions: ['.svx'], layout: { runbook } })],
   kit: {
-    adapter: adapter({ pages: 'build', assets: 'build', strict: false }),
+    adapter: adapter({ pages: process.env.OUT_DIR ?? 'build', assets: process.env.OUT_DIR ?? 'build', strict: false }),
     alias: { '#lib': 'src/lib' },
-    prerender: { entries: ['/kb'], handleHttpError: 'warn' },
+    // GitHub Pages serves the kb under /<repo>; BASE_PATH=/mega-s01e03 for that build.
+    paths: { base: process.env.BASE_PATH ?? '' },
+    prerender: { entries: ['*'], handleHttpError: 'warn' },
   },
 };
